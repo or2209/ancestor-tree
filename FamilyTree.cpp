@@ -7,7 +7,7 @@
 #include <exception>
 #include <queue>
 #define COUNT 10
-using namespace std;
+// using namespace std;
 using namespace family;
 
 static Tree *node = NULL;
@@ -16,9 +16,11 @@ Tree &Tree::addFather(string son, string father)
 {
     Tree *current = findMe(son);
     if (current == NULL)
-        throw out_of_range{"Did not find the son " + son + " in the tree"};
+  {
+    std::cerr << "exception caught:Did not find the son " + son + " in the tree "  << '\n';
+  }
     if (current->father != NULL)
-        throw runtime_error("this son already have a father");
+        std::cerr << "this son already have a father "  << '\n';
     current->father = new Tree(father, current);
     return *this;
 }
@@ -27,9 +29,9 @@ Tree &Tree::addMother(string son, string mother)
 {
     Tree *current = findMe(son);
     if (current == NULL)
-        throw out_of_range{"Did not find the son " + son + " in the tree"};
+         std::cerr << "exception caught:Did not find the son " + son + " in the tree "  << '\n';
     if (current->mother != NULL)
-        throw runtime_error("this son already have a mother");
+        std::cerr << "this son already have a father "  << '\n';
     current->mother = new Tree(mother, current);
     return *this;
 }
@@ -39,11 +41,11 @@ void Tree::remove(string name)
     
     if (this->name == name)
         // throw out_of_range{"cant remove the root"};
-        throw std::exception();
+       std::cerr << "cant remove the root" << '\n';
         Tree *current = findMe(name);
     if (current == NULL)
         // throw out_of_range{"did not find the person" + name};
-       throw std::exception();
+       std::cerr << "did not find the person " +name  << '\n';
     if (current->son != NULL)
     {
         Tree *son = current->son;
@@ -132,7 +134,7 @@ string Tree::find(string relation)
         }
     }
     if (relation.at(0) != 'g')
-        throw out_of_range{"illegal relation"};
+        std::cerr << "illegal relation "  << '\n';
     int count = 3; //levels in tree
     for (size_t i = 0; i < relation.size(); i++)
     {
@@ -154,7 +156,7 @@ string Tree::find(string relation)
                 return current->name;
         }
     }
-    throw out_of_range{"did not find a someone in the tree with this relation"};
+    return "not find someone with this relation";
 }
 
 void Tree::display()
@@ -207,7 +209,7 @@ void Tree::print2DUtil(Tree *root, int space)
     // Process left child
     print2DUtil(root->mother, space);
 }
-vector<string> Tree::getNodesAtDistance(int distance)
+vector<string>Tree::getNodesAtDistance(int distance)
 {
     getNodesAtDistance(this, distance-1);
     return list;
@@ -223,7 +225,7 @@ void Tree::getNodesAtDistance(Tree *root, int distance)
     if (distance == 0)
     {
        // cout<<"sdsd"<<endl;
-        list.insert(list.begin(),root->name);
+        list.push_back(root->name);
 //        cout<< list.at(i)<<endl;
 //        i++;
         return;
