@@ -9,7 +9,7 @@
 #include <queue>
 #define COUNT 10
 // using namespace std;
-using namespace family;
+namespace family{
 
 static Tree *node = NULL;
 static vector<string> list;
@@ -255,3 +255,4 @@ void Tree::getNodesAtDistance(Tree *root, int distance)
 //     deleteTree(t->mother);
 //     free(t);
 // }
+}
