@@ -1,0 +1,16 @@
+#pragma once
+#include "FamilyTree.hpp"
+#include <iostream>
+using namespace std;
+using namespace family;
+int main()
+{
+    Tree *t = new Tree("Yosef");              // Yosef is the "root" of the tree (the youngest person).
+      t->addFather("Yosef", "Yaakov"); // Tells the tree that the father of Yosef is Yaakov.
+    t->addMother("Yosef", "rachel");
+    t->addFather("Yaakov", "Isaac");
+    t->addMother("Yaakov", "Rivka");
+    t->addFather("Isaac", "Avraham");
+    t->addFather("Avraham", "Terah");
+    cout << t->relation("Terah") << endl;
+}
