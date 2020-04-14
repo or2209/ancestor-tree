@@ -11,6 +11,7 @@ using namespace std;
 using namespace family;
 
 static Tree *node = NULL;
+static vector<string> list;
 Tree &Tree::addFather(string son, string father)
 {
     Tree *current = findMe(son);
@@ -138,10 +139,10 @@ string Tree::find(string relation)
         if (relation.at(i) == '-')
             count++;
     }
-    vector<string> list = getNodesAtDistance(count);
-    for (size_t i = 0; i < list.size(); i++)
+    vector<string> list1 = getNodesAtDistance(count);
+    for (size_t i = 0; i < list1.size(); i++)
     {
-        Tree *current = findMe(list.at(i));
+        Tree *current = findMe(list1.at(i));
         if (gender == "father")
         {
             if (current->son->father != NULL)
@@ -206,27 +207,40 @@ void Tree::print2DUtil(Tree *root, int space)
     // Process left child
     print2DUtil(root->mother, space);
 }
-
 vector<string> Tree::getNodesAtDistance(int distance)
 {
-    vector<string> list;
-    getNodesAtDistance(this, distance, list);
+    getNodesAtDistance(this, distance-1);
     return list;
 }
 
-void Tree::getNodesAtDistance(Tree *root, int distance, vector<string> list)
+void Tree::getNodesAtDistance(Tree *root, int distance)
 {
-    if (root == NULL)
+   // cout<<"list.size()"<<endl;
+
+    if (root == NULL )
         return;
 
     if (distance == 0)
     {
-        list.insert(list.begin(), root->name);
+       // cout<<"sdsd"<<endl;
+        list.insert(list.begin(),root->name);
+//        cout<< list.at(i)<<endl;
+//        i++;
+        return;
+    }
+    if(root->father==NULL && root->mother==NULL) {
         return;
     }
 
-    getNodesAtDistance(root->mother, distance - 1, list);
-    getNodesAtDistance(root->father, distance - 1, list);
+    if(root->mother==NULL){
+         getNodesAtDistance(root->father,distance-1);
+    }
+    if(root->father==NULL){
+         getNodesAtDistance(root->mother,distance-1);
+    }
+
+     getNodesAtDistance(root->mother, distance - 1);
+     getNodesAtDistance(root->father, distance - 1);
 }
 
 // void Tree::deleteTree(Tree *t)

@@ -49,7 +49,7 @@ private:
     bool findhelp(Tree* root,string name);  
     void print2DUtil(Tree *root, int space);
     vector<string>getNodesAtDistance(int distance);
-    void getNodesAtDistance(Tree* root,int distance,vector<string>list);
+    void getNodesAtDistance(Tree* root,int distance);
             
 };
 } // namespace family
