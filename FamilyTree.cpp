@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include "FamilyTree.hpp"
 #include <vector>
