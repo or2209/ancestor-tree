@@ -68,6 +68,7 @@ TEST_CASE("Test function in or tree")
     CHECK(T2.find("grandmother") == string("miriam"));
     CHECK(T2.find("grandfather") == string("michael"));
     CHECK(T2.find("me") == string("or"));
+    // CHECK(T2.find("great-grandmother") == string("michael"));
     // CHECK(T2.find("great-grandfather")==string("kaduri"));
     // CHECK(T2.find("great-great-grandfather")==string("ribo"));
     //realation after remove node from the tree
@@ -164,10 +165,10 @@ TEST_CASE("Test function in uri tree")
     CHECK(T4.relation("ari") == string("unrelated"));
     CHECK(T4.relation("meri") == string("unrelated"));
     CHECK(T4.relation("miri") == string("unrelated"));
-     CHECK(T4.relation("miri") == string("unrelated"));
-      CHECK(T4.relation("lol") == string("unrelated"));
-       CHECK(T4.relation("root") == string("unrelated"));
-    
+    CHECK(T4.relation("miri") == string("unrelated"));
+    CHECK(T4.relation("lol") == string("unrelated"));
+    CHECK(T4.relation("root") == string("unrelated"));
+
     T4.addMother("keren", "shimon");
     T4.addMother("shimon", "meri");
     T4.addFather("shimon", "ari");

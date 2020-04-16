@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include "FamilyTree.hpp"
 #include <vector>
@@ -8,8 +7,9 @@
 #include <exception>
 #include <queue>
 #define COUNT 10
-// using namespace std;
-namespace family{
+ using namespace std;
+namespace family
+{
 
 static Tree *node = NULL;
 static vector<string> list;
@@ -17,11 +17,11 @@ Tree &Tree::addFather(string son, string father)
 {
     Tree *current = findMe(son);
     if (current == NULL)
-  {
-    std::cerr << "exception caught:Did not find the son " + son + " in the tree "  << '\n';
-  }
+    {
+        std::cerr << "exception caught:Did not find the son " + son + " in the tree " << '\n';
+    }
     if (current->father != NULL)
-        std::cerr << "this son already have a father "  << '\n';
+        std::cerr << "this son already have a father " << '\n';
     current->father = new Tree(father, current);
     return *this;
 }
@@ -30,23 +30,25 @@ Tree &Tree::addMother(string son, string mother)
 {
     Tree *current = findMe(son);
     if (current == NULL)
-         std::cerr << "exception caught:Did not find the son " + son + " in the tree "  << '\n';
+        std::cerr << "exception caught:Did not find the son " + son + " in the tree " << '\n';
     if (current->mother != NULL)
-        std::cerr << "this son already have a father "  << '\n';
+        std::cerr << "this son already have a father " << '\n';
     current->mother = new Tree(mother, current);
     return *this;
 }
 
 void Tree::remove(string name)
 {
-    
+
     if (this->name == name)
         // throw out_of_range{"cant remove the root"};
-       std::cerr << "cant remove the root" << '\n';
-        Tree *current = findMe(name);
+        // std::cerr << "cant remove the root" << '\n';
+         throw runtime_error("cant delete-this person not found in tree");
+    Tree *current = findMe(name);
     if (current == NULL)
         // throw out_of_range{"did not find the person" + name};
-       std::cerr << "did not find the person " +name  << '\n';
+        // std::cerr << "did not find the person " + name << '\n';
+        throw runtime_error("cant delete-this person not found in tree");
     if (current->son != NULL)
     {
         Tree *son = current->son;
@@ -61,16 +63,16 @@ void Tree::remove(string name)
     }
 }
 
-string Tree::relation(string name)
+string Tree::relation(string name) //still need to check
 {
     Tree *current = findMe(name);
     if (current == NULL)
         return "unrelated";
     if (this->name == name)
         return "me";
-        if(this->father->name==name)
+    if (this->father->name == name)
         return "father";
-        if(this->mother->name==name)
+    if (this->mother->name == name)
         return "mother";
     string grand = "";
     string gender = "";
@@ -95,8 +97,8 @@ string Tree::relation(string name)
     }
     if (count == 3)
         return "grand" + gender;
-        //else-father or mother
-        return gender;
+    //else-father or mother
+    return gender;
 }
 
 string Tree::find(string relation)
@@ -104,19 +106,29 @@ string Tree::find(string relation)
     string gender = "";
     if (relation == "me")
         return this->name;
-    if (relation.at(0) == 'm')
+    if (relation == "mother")
         return this->mother->name;
-    if (relation.at(0) == 'f')
+    if (relation == "father")
         return this->father->name;
+    if (relation.at(0) != 'g')
+    throw runtime_error("illegal relation input");
+    // throw exception("illegal relation");//check why error!!
+    // std::cerr << "illegal relation "  << '\n';
+    if (relation.substr(0, 5) != "grand" && relation.substr(0, 5) != "great")
+        std::cerr << "illegal relation " << '\n';
     int size = relation.size();
     if (size > 6)
     {
         char check = relation.at(size - 6);
         if (check == 'f')
             gender = "father";
-        else
+        else if (check == 'm')
             gender = "mother";
-        if (relation.at(2) == 'a')
+        else if (check != 'f' && check != 'g')
+        {
+            std::cerr << "illegal relation " << '\n';
+        }
+        if (relation=="grandfather"||relation=="grandmother")
         {
             if (gender == "father")
             {
@@ -134,8 +146,8 @@ string Tree::find(string relation)
             }
         }
     }
-    if (relation.at(0) != 'g')
-        std::cerr << "illegal relation "  << '\n';
+    // if (relation.at(0) != 'g')
+    //     std::cerr << "illegal relation " << '\n';
     int count = 3; //levels in tree
     for (size_t i = 0; i < relation.size(); i++)
     {
@@ -157,7 +169,7 @@ string Tree::find(string relation)
                 return current->name;
         }
     }
-    return "not find someone with this relation";
+    return "not find someone with this relation";//check if throw error in this case??
 }
 
 void Tree::display()
@@ -210,40 +222,43 @@ void Tree::print2DUtil(Tree *root, int space)
     // Process left child
     print2DUtil(root->mother, space);
 }
-vector<string>Tree::getNodesAtDistance(int distance)
+vector<string> Tree::getNodesAtDistance(int distance)
 {
-    getNodesAtDistance(this, distance-1);
+    getNodesAtDistance(this, distance - 1);
     return list;
 }
 
 void Tree::getNodesAtDistance(Tree *root, int distance)
 {
-   // cout<<"list.size()"<<endl;
+    // cout<<"list.size()"<<endl;
 
-    if (root == NULL )
+    if (root == NULL)
         return;
 
     if (distance == 0)
     {
-       // cout<<"sdsd"<<endl;
+        // cout<<"sdsd"<<endl;
         list.push_back(root->name);
-//        cout<< list.at(i)<<endl;
-//        i++;
+        //        cout<< list.at(i)<<endl;
+        //        i++;
         return;
     }
-    if(root->father==NULL && root->mother==NULL) {
+    if (root->father == NULL && root->mother == NULL)
+    {
         return;
     }
 
-    if(root->mother==NULL){
-         getNodesAtDistance(root->father,distance-1);
+    if (root->mother == NULL)
+    {
+        getNodesAtDistance(root->father, distance - 1);
     }
-    if(root->father==NULL){
-         getNodesAtDistance(root->mother,distance-1);
+    if (root->father == NULL)
+    {
+        getNodesAtDistance(root->mother, distance - 1);
     }
 
-     getNodesAtDistance(root->mother, distance - 1);
-     getNodesAtDistance(root->father, distance - 1);
+    getNodesAtDistance(root->mother, distance - 1);
+    getNodesAtDistance(root->father, distance - 1);
 }
 
 // void Tree::deleteTree(Tree *t)
@@ -255,4 +270,4 @@ void Tree::getNodesAtDistance(Tree *root, int distance)
 //     deleteTree(t->mother);
 //     free(t);
 // }
-}
+} // namespace family
