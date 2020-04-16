@@ -18,10 +18,10 @@ Tree &Tree::addFather(string son, string father)
     Tree *current = findMe(son);
     if (current == NULL)
     {
-        std::cerr << "exception caught:Did not find the son " + son + " in the tree " << '\n';
+        throw runtime_error("exception caught:Did not find the son " + son + " in the tree");
     }
     if (current->father != NULL)
-        std::cerr << "this son already have a father " << '\n';
+        throw runtime_error("this son " + son + " already has a father");
     current->father = new Tree(father, current);
     return *this;
 }
@@ -30,9 +30,9 @@ Tree &Tree::addMother(string son, string mother)
 {
     Tree *current = findMe(son);
     if (current == NULL)
-        std::cerr << "exception caught:Did not find the son " + son + " in the tree " << '\n';
+        throw runtime_error("exception caught:Did not find the son " + son + " in the tree");
     if (current->mother != NULL)
-        std::cerr << "this son already have a father " << '\n';
+        throw runtime_error("this son " + son + " already has a mother");
     current->mother = new Tree(mother, current);
     return *this;
 }
@@ -43,7 +43,7 @@ void Tree::remove(string name)
     if (this->name == name)
         // throw out_of_range{"cant remove the root"};
         // std::cerr << "cant remove the root" << '\n';
-         throw runtime_error("cant delete-this person not found in tree");
+         throw runtime_error("cant delete the root");
     Tree *current = findMe(name);
     if (current == NULL)
         // throw out_of_range{"did not find the person" + name};
@@ -111,11 +111,11 @@ string Tree::find(string relation)
     if (relation == "father")
         return this->father->name;
     if (relation.at(0) != 'g')
-    throw runtime_error("illegal relation input");
+        throw runtime_error("illegal relation input");
     // throw exception("illegal relation");//check why error!!
     // std::cerr << "illegal relation "  << '\n';
     if (relation.substr(0, 5) != "grand" && relation.substr(0, 5) != "great")
-        std::cerr << "illegal relation " << '\n';
+         throw runtime_error("illegal relation input");
     int size = relation.size();
     if (size > 6)
     {
@@ -126,7 +126,7 @@ string Tree::find(string relation)
             gender = "mother";
         else if (check != 'f' && check != 'g')
         {
-            std::cerr << "illegal relation " << '\n';
+            throw runtime_error("illegal relation input");
         }
         if (relation=="grandfather"||relation=="grandmother")
         {
@@ -169,7 +169,7 @@ string Tree::find(string relation)
                 return current->name;
         }
     }
-    return "not find someone with this relation";//check if throw error in this case??
+     throw runtime_error("illegal relation input");
 }
 
 void Tree::display()
