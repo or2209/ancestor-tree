@@ -14,6 +14,7 @@ class Tree
     Tree *father;
     Tree *mother;
     Tree *son;
+    char g;
 
 public:
     Tree(string name)
